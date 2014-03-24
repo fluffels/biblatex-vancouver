@@ -1,0 +1,52 @@
+% In your usepackage section.
+\usepackage[style=numeric, maxbibnames=6, backend=bibtex]{biblatex}
+
+% In the pre-amble.
+\DeclareNameFormat*{default}{\ifblank{#5}{}{#5 }\ifblank{#1}{}{#1}\ifblank{#4}{}{ #4}\ifblank{#7}{}{ (#7)}\ifthenelse{\value{listcount}<\value{liststop}}{, }{}}
+\DeclareFieldFormat*{citetitle}{#1}
+\DeclareFieldFormat*{title}{#1}
+\DeclareFieldFormat*{booktitle}{#1}
+\DeclareFieldFormat*{journaltitle}{#1}
+\DeclareFieldFormat*{date}{#1}
+\renewcommand*{\finalnamedelim}{\addcomma\space}
+
+\renewbibmacro{in:}{}
+\renewbibmacro*{publisher+location+date}
+{
+   \printlist{publisher}%
+   \setunit*{\addcomma\space}%
+   \printlist{location}%
+   \setunit*{\addcomma\space}%
+   \usebibmacro{date}%
+   \newunit
+}
+
+\DeclareBibliographyDriver{article}{%
+   \usebibmacro{author}\adddot\addspace%
+   \printfield{title}\adddot\addspace%
+   \printfield{journaltitle}\adddot\addspace%
+   \printfield{year}\adddot\addspace%
+   \printfield{volume}%
+   \iffieldundef{number}{}{\addspace(\printfield{number})}:\addspace%
+   \printfield{pages}.
+}
+
+\DeclareBibliographyDriver{inproceedings}{%
+   \usebibmacro{author}\adddot\addspace%
+   \printfield{title}\adddot\addspace%
+   Paper presented at: \printfield{eventtitle}\adddot\addspace%
+   \printfield{booktitle};\addspace%
+   \printeventdate;\addspace%
+   \printfield{venue}\adddot\addspace%
+   \printlist{location}:\addspace%
+   \printlist{publisher};\addspace%
+   \printfield{year}.\addspace%
+   \printfield{pages}.
+}
+
+% In the pre-amble.
+\addbibresource{somebib.tex}
+
+% Just before \end{document}
+\printbibliography
+
